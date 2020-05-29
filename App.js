@@ -6,109 +6,127 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const App: () => React$Node = () => {
+import Onboarding from './src/screens/Onboarding';
+import Signup from './src/screens/Signup';
+import SignIn from './src/screens/SignIn';
+import Tasks from './src/screens/Tabs/Tasks/Tasks';
+import Menu from './src/screens/Menu';
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const MyTaskScreens = () => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <Stack.Navigator initialRouteName="Tasks">
+      <Stack.Screen name="Tasks" component={Tasks} options={{
+        title: "Work List",
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: 'rgb(255, 79, 82)',
+        },
+        headerTitleAlign: "center"
+      }} />
+    </Stack.Navigator>
+  );
+}
+
+const MenuScreens = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Menu" component={Menu} options={{
+        title: "Projects",
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: 'rgb(255, 79, 82)',
+        },
+        headerTitleAlign: "center"
+      }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Tasks"
+      screenOptions={({route}) => {
+        return {
+          tabBarIcon: ({focused, color, size}) => {
+            let iconName;
+
+            if (route.name === 'Tasks') {
+              iconName = focused
+                ? 'ios-checkmark-circle'
+                : 'ios-checkmark-circle-outline';
+            } else if (route.name === 'Menu') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        };
+      }}
+      tabBarOptions={{
+        activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        tabStyle: {
+          backgroundColor: 'rgb(42, 43, 81)',
+        },
+      }}>
+      <Tab.Screen name="Tasks" component={MyTaskScreens} options={{title: "My Tasks"}} />
+      <Tab.Screen name="Menu" component={MenuScreens} />
+    </Tab.Navigator>
   );
 };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+class App extends Component {
+  render() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Onboarding">
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{
+              headerTitle: '',
+            }}
+          />
+          <Stack.Screen
+            name="SignIn"
+            component={SignIn}
+            options={{
+              headerTitle: '',
+            }}
+          />
+          <Stack.Screen
+            name="Tabs"
+            component={Tabs}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
+
+const styles = StyleSheet.create({});
 
 export default App;
