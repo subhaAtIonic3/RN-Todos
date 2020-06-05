@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 
-import ColorPalette from "../components/ColorPalette/ColorPalette";
-
+import ColorMeter from "./ColorMeter";
 
 class CreateNotes extends Component {
 
@@ -14,6 +13,10 @@ class CreateNotes extends Component {
         };
     }
 
+    selectedColorPalette = (colorName) => {
+        console.log(colorName); 
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -23,16 +26,7 @@ class CreateNotes extends Component {
                         <View style={styles.notesDescription}>
                             <TextInput style={styles.notesInput} multiline placeholder="Take notes..." />
                         </View>
-                        <View style={styles.selectColorContainer}>
-                            <Text style={styles.chooseColorLabel}>Choose Color</Text>
-                            <View style={styles.colorsContainer}>
-                                <ColorPalette color="green" />
-                                <ColorPalette color="red" />
-                                <ColorPalette color="yellow" />
-                                <ColorPalette color="black" />
-                                <ColorPalette color="orange" />
-                            </View>
-                        </View>
+                        <ColorMeter getSelectedColorPalette={this.selectedColorPalette} />
                         <View style={styles.btnContainer}>
                             <TouchableOpacity style={styles.doneBtn}>
                                 <Text style={styles.doneBtnText}>Done</Text>
@@ -76,16 +70,6 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         fontSize: 18,
 
-    },
-    selectColorContainer: {},
-    chooseColorLabel: {
-        fontSize: 18,
-        fontWeight: "bold"
-    },
-    colorsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginVertical: 15
     },
     btnContainer: {
         marginVertical: 30,

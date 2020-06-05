@@ -84,9 +84,7 @@ class Tasks extends Component {
   };
 
   popupItemClickHandler = (type) => {
-    console.log(type);
     const { navigation } = this.props;
-    
     if (type === "quickNote") {
       // go to quick notes screen
       navigation.navigate("Notes", { screen: "CreateNotes", initial: false });
