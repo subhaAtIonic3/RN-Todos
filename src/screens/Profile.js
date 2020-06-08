@@ -1,10 +1,47 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 import UserAvatar from 'react-native-user-avatar';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import ProgressCircle from 'react-native-progress-circle';
+
+import TaskTile from '../components/TaskTile/TaskTile';
+
+const DATA = [
+  {
+    name: 'Total Task',
+    number: 190,
+    color: 'rgb(255, 79, 82)',
+    percentage: 60,
+  },
+  {
+    name: 'To Do Task',
+    number: 5,
+    color: 'rgb(103, 98, 255)',
+    percentage: 90,
+  },
+  {
+    name: 'Quick Notes',
+    number: 20,
+    color: 'rgb(146, 65, 255)',
+  },
+];
 
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tilesData: DATA,
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -23,13 +60,53 @@ class Profile extends Component {
           </View>
           <View style={styles.taskDetailsContainer}>
             <View style={styles.tasksDetails}>
-                <Text style={styles.tasksText}>120</Text>
-                <Text style={styles.tasksLabel}>Create Tasks</Text>
+              <Text style={styles.tasksText}>120</Text>
+              <Text style={styles.tasksLabel}>Create Tasks</Text>
             </View>
             <View styles={styles.tasksDetails}>
-                <Text style={styles.tasksText}>80</Text>
-                <Text style={styles.tasksLabel}>Completed Tasks</Text>
+              <Text style={styles.tasksText}>80</Text>
+              <Text style={styles.tasksLabel}>Completed Tasks</Text>
             </View>
+          </View>
+        </View>
+        <ScrollView
+          style={styles.taskTilesContainer}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          {this.state.tilesData.map(tile => {
+            return (
+              <TaskTile
+                key={tile.name}
+                taskName={tile.name}
+                taskNumber={tile.number}
+                bgColor={tile.color}
+              />
+            );
+          })}
+        </ScrollView>
+        <View style={styles.statisticContainer}>
+          <Text style={styles.sectionLabel}>Statistics</Text>
+          <View style={styles.progressCircleContainer}>
+            {this.state.tilesData.map(tile => {
+              if (tile.percentage) {
+                return (
+                  <View key={tile.name}>
+                    <ProgressCircle
+                      containerStyle={styles.progressCircle}
+                      percent={tile.percentage}
+                      radius={30}
+                      borderWidth={3}
+                      color={tile.color}
+                      shadowColor="#ccc"
+                      bgColor="#fff">
+                      <Text style={{fontSize: 18}}>{`${tile.percentage}%`}</Text>
+                    </ProgressCircle>
+                    <Text style={styles.progressCircleTaskName}>{tile.name}</Text>
+                  </View>
+                );
+              }
+              return null;
+            })}
           </View>
         </View>
       </View>
@@ -57,12 +134,12 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
 
     elevation: 4,
-    position: "relative"
+    position: 'relative',
   },
   settings: {
-      position: "absolute",
-      top: 10,
-      right: 10
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   userInfoCard: {
     flexDirection: 'row',
@@ -77,25 +154,56 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   userName: {
-    fontSize: 20
+    fontSize: 20,
   },
   userEmail: {
     fontSize: 16,
-    color: "rgb(172, 172, 172)"
+    color: 'rgb(172, 172, 172)',
   },
   taskDetailsContainer: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    margin: 20
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    margin: 20,
   },
-  tasksDetails: {
-  },
+  tasksDetails: {},
   tasksText: {
-    fontSize: 20
+    fontSize: 20,
   },
   tasksLabel: {
     fontSize: 16,
-    color: "rgb(172, 172, 172)"
+    color: 'rgb(172, 172, 172)',
+  },
+  taskTilesContainer: {
+    marginVertical: 20,
+  },
+  statisticContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 25,
+    backgroundColor: '#fff',
+    borderRadius: 3,
+    height: 175,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  sectionLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  progressCircleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20
+  },
+  progressCircle: {},
+  progressCircleTaskName: {
+    marginTop: 5
   }
 });
 

@@ -22,9 +22,11 @@ class CreateNotes extends Component {
             <View style={styles.container}>
                 <View style={styles.notesContainer}>
                     <View style={styles.notesCard}>
-                        <Text style={styles.descriptionLabel}>Description</Text>
+                        <View>
+                            <TextInput style={styles.notesTitle} placeholder="Title" />
+                        </View>
                         <View style={styles.notesDescription}>
-                            <TextInput style={styles.notesInput} multiline placeholder="Take notes..." />
+                            <TextInput style={styles.notesInput} multiline placeholder="Description" />
                         </View>
                         <ColorMeter getSelectedColorPalette={this.selectedColorPalette} />
                         <View style={styles.btnContainer}>
@@ -58,18 +60,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 3
     },
-    descriptionLabel: {
+    notesTitle: {
         fontSize: 18,
         fontWeight: "bold"
     },
     notesCard: {},
     notesDescription: {},
     notesInput: {
-        maxHeight: 200,
         marginTop: 5,
         marginBottom: 30,
         fontSize: 18,
-
     },
     btnContainer: {
         marginVertical: 30,

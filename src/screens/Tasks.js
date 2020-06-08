@@ -10,7 +10,7 @@ import SegmentedControlTab from 'react-native-segmented-control-tab';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Calendar } from 'react-native-calendars';
 
-import TextViewer from "../components/TaskViewer/TaskViewer";
+import TaskViewer from "../components/TaskViewer/TaskViewer";
 import QuickAction from "../components/QuickAction/QuickAction";
 
 const DATA = [
@@ -72,6 +72,7 @@ class Tasks extends Component {
 
   toggleAddTaskPopup = () => {
     this.setState((prevState) => ({
+      ...this.state,
       togglePopup: !prevState.togglePopup
     }));
   }
@@ -120,7 +121,7 @@ class Tasks extends Component {
         />
         <View style={styles.listContainer}>
           {this.state.selectedIndex === 0 ? (
-              <TextViewer listData={DATA} />
+              <TaskViewer listData={DATA} />
           ) : (
             <View>
               <Calendar

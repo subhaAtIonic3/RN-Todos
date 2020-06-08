@@ -49,8 +49,9 @@ class ColorMeter extends Component {
 
   selectedColorPalette = () => {
     const selectColor = this.state.colorPalettes.find((colorObj) => colorObj.isSelected);
-
-    this.props.getSelectedColorPalette && this.props.getSelectedColorPalette(selectColor.name);
+    if (selectColor) {
+      this.props.getSelectedColorPalette && this.props.getSelectedColorPalette(selectColor.name);
+    }
   }
 
   render() {
