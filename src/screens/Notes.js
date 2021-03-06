@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -69,20 +69,14 @@ const DATA = [
   },
 ];
 
-class Notes extends Component {
-  constructor(props) {
-    super(props);
+const Notes = (props) => {
+  const [togglePopup, setTogglePopup] = useState(false);
 
-    this.state = {
-      togglePopup: false,
-    };
-  }
-
-  componentDidMount() {
-    const { navigation } = this.props;
+  useLayoutEffect(() => {
+    const { navigation } = props;
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={this.toggleAddTaskPopup}>
+        <TouchableOpacity onPress={toggleAddTaskPopup}>
           <View
             style={{
               paddingHorizontal: 15,
@@ -93,39 +87,32 @@ class Notes extends Component {
         </TouchableOpacity>
       ),
     });
-  }
+  }, []);
 
-  toggleAddTaskPopup = () => {
-    this.setState((prevState) => ({
-      ...this.state,
-      togglePopup: !prevState.togglePopup,
-    }));
+  const toggleAddTaskPopup = () => {
+    setTogglePopup(!togglePopup);
   };
 
-  popupItemClickHandler = (type) => {
-    const { navigation } = this.props;
+  const popupItemClickHandler = (type) => {
+    const { navigation } = props;
     if (type === "quickNote") {
       // go to quick notes screen
       navigation.navigate("CreateNotes");
     } else {
       // go tot create task screen
     }
-    this.setState((prevState) => ({
-      togglePopup: !prevState.togglePopup,
-    }));
+    setTogglePopup(!togglePopup);
   };
 
-  render() {
-    return (
-      <View style={styles.notesContainer}>
-        {this.state.togglePopup ? (
-          <QuickAction isVisible={true} clicked={this.popupItemClickHandler} />
-        ) : null}
-        <NotesViewer listData={DATA} />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.notesContainer}>
+      {togglePopup ? (
+        <QuickAction isVisible={true} clicked={popupItemClickHandler} />
+      ) : null}
+      <NotesViewer listData={DATA} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   notesContainer: {

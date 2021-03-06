@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -33,92 +33,80 @@ const DATA = [
   },
 ];
 
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      tilesData: DATA,
-    };
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.userInfoContainer}>
-          <TouchableOpacity style={styles.settings}>
-            <FontAwesome name="gear" size={24} color="black" />
-          </TouchableOpacity>
-          <View style={styles.userInfoCard}>
-            <View style={styles.profilePicture}>
-              <UserAvatar size={70} name="Dany Barbosa" />
-            </View>
-            <View style={styles.userNameContainer}>
-              <Text style={styles.userName}>Dany Barbosa</Text>
-              <Text style={styles.userEmail}>danny.8q1@fly.com</Text>
-            </View>
+const Profile = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.userInfoContainer}>
+        <TouchableOpacity style={styles.settings}>
+          <FontAwesome name="gear" size={24} color="black" />
+        </TouchableOpacity>
+        <View style={styles.userInfoCard}>
+          <View style={styles.profilePicture}>
+            <UserAvatar size={70} name="Dany Barbosa" />
           </View>
-          <View style={styles.taskDetailsContainer}>
-            <View style={styles.tasksDetails}>
-              <Text style={styles.tasksText}>120</Text>
-              <Text style={styles.tasksLabel}>Create Tasks</Text>
-            </View>
-            <View styles={styles.tasksDetails}>
-              <Text style={styles.tasksText}>80</Text>
-              <Text style={styles.tasksLabel}>Completed Tasks</Text>
-            </View>
+          <View style={styles.userNameContainer}>
+            <Text style={styles.userName}>Dany Barbosa</Text>
+            <Text style={styles.userEmail}>danny.8q1@fly.com</Text>
           </View>
         </View>
-        <ScrollView
-          style={styles.taskTilesContainer}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {this.state.tilesData.map((tile) => {
-            return (
-              <TaskTile
-                key={tile.name}
-                taskName={tile.name}
-                taskNumber={tile.number}
-                bgColor={tile.color}
-              />
-            );
-          })}
-        </ScrollView>
-        <View style={styles.statisticContainer}>
-          <Text style={styles.sectionLabel}>Statistics</Text>
-          <View style={styles.progressCircleContainer}>
-            {this.state.tilesData.map((tile) => {
-              if (tile.percentage) {
-                return (
-                  <View key={tile.name}>
-                    <ProgressCircle
-                      containerStyle={styles.progressCircle}
-                      percent={tile.percentage}
-                      radius={30}
-                      borderWidth={3}
-                      color={tile.color}
-                      shadowColor="#ccc"
-                      bgColor="#fff"
-                    >
-                      <Text
-                        style={{ fontSize: 18 }}
-                      >{`${tile.percentage}%`}</Text>
-                    </ProgressCircle>
-                    <Text style={styles.progressCircleTaskName}>
-                      {tile.name}
-                    </Text>
-                  </View>
-                );
-              }
-              return null;
-            })}
+        <View style={styles.taskDetailsContainer}>
+          <View style={styles.tasksDetails}>
+            <Text style={styles.tasksText}>120</Text>
+            <Text style={styles.tasksLabel}>Create Tasks</Text>
+          </View>
+          <View styles={styles.tasksDetails}>
+            <Text style={styles.tasksText}>80</Text>
+            <Text style={styles.tasksLabel}>Completed Tasks</Text>
           </View>
         </View>
       </View>
-    );
-  }
-}
+      <ScrollView
+        style={styles.taskTilesContainer}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        {DATA.map((tile) => {
+          return (
+            <TaskTile
+              key={tile.name}
+              taskName={tile.name}
+              taskNumber={tile.number}
+              bgColor={tile.color}
+            />
+          );
+        })}
+      </ScrollView>
+      <View style={styles.statisticContainer}>
+        <Text style={styles.sectionLabel}>Statistics</Text>
+        <View style={styles.progressCircleContainer}>
+          {DATA.map((tile) => {
+            if (tile.percentage) {
+              return (
+                <View key={tile.name}>
+                  <ProgressCircle
+                    containerStyle={styles.progressCircle}
+                    percent={tile.percentage}
+                    radius={30}
+                    borderWidth={3}
+                    color={tile.color}
+                    shadowColor="#ccc"
+                    bgColor="#fff"
+                  >
+                    <Text
+                      style={{ fontSize: 18 }}
+                    >{`${tile.percentage}%`}</Text>
+                  </ProgressCircle>
+                  <Text style={styles.progressCircleTaskName}>{tile.name}</Text>
+                </View>
+              );
+            }
+            return null;
+          })}
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

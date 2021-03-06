@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { View, StyleSheet, Platform, TouchableOpacity } from "react-native";
 
 import SegmentedControlTab from "react-native-segmented-control-tab";
@@ -39,22 +39,16 @@ const vacation = { key: "vacation", color: "red", selectedDotColor: "blue" };
 const massage = { key: "massage", color: "blue", selectedDotColor: "blue" };
 const workout = { key: "workout", color: "green" };
 
-class Tasks extends Component {
-  constructor(props) {
-    super(props);
+const Tasks = (props) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
+  const [togglePopup, setTogglePopup] = useState(false);
 
-    this.state = {
-      selectedIndex: 0,
-      showMenu: false,
-      togglePopup: false,
-    };
-  }
-
-  componentDidMount() {
-    const { navigation } = this.props;
+  useLayoutEffect(() => {
+    const { navigation } = props;
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={this.toggleAddTaskPopup}>
+        <TouchableOpacity onPress={toggleAddTaskPopup}>
           <View
             style={{
               paddingHorizontal: 15,
@@ -65,76 +59,66 @@ class Tasks extends Component {
         </TouchableOpacity>
       ),
     });
-  }
+  }, []);
 
-  toggleAddTaskPopup = () => {
-    this.setState((prevState) => ({
-      ...this.state,
-      togglePopup: !prevState.togglePopup,
-    }));
+  const toggleAddTaskPopup = () => {
+    setTogglePopup(!togglePopup);
   };
 
-  handleIndexChange = (index) => {
-    this.setState({
-      ...this.state,
-      selectedIndex: index,
-    });
+  const handleIndexChange = (index) => {
+    setSelectedIndex(index);
   };
 
-  popupItemClickHandler = (type) => {
-    const { navigation } = this.props;
+  const popupItemClickHandler = (type) => {
+    const { navigation } = props;
     if (type === "quickNote") {
       // go to quick notes screen
       navigation.navigate("Notes", { screen: "CreateNotes", initial: false });
     } else {
       // go tot create task screen
     }
-    this.setState((prevState) => ({
-      togglePopup: !prevState.togglePopup,
-    }));
+    setTogglePopup(!togglePopup);
   };
 
-  render() {
-    return (
-      <View>
-        {this.state.togglePopup ? (
-          <QuickAction isVisible={true} clicked={this.popupItemClickHandler} />
-        ) : null}
-        <SegmentedControlTab
-          values={["Today", "Month"]}
-          selectedIndex={this.state.selectedIndex}
-          onTabPress={this.handleIndexChange}
-          borderRadius={0}
-          tabStyle={styles.tabStyle}
-          activeTabStyle={styles.activeTabStyle}
-          tabTextStyle={styles.tabTextStyle}
-          activeTabTextStyle={
-            Platform.OS === "ios"
-              ? styles.activeTabTextStyle_iOS
-              : styles.activeTabTextStyle
-          }
-        />
-        <View style={styles.listContainer}>
-          {this.state.selectedIndex === 0 ? (
-            <TaskViewer listData={DATA} />
-          ) : (
-            <View>
-              <Calendar
-                markedDates={{
-                  "2020-05-25": {
-                    dots: [vacation, massage, workout],
-                  },
-                  "2020-05-26": { dots: [massage, workout] },
-                }}
-                markingType={"multi-dot"}
-              />
-            </View>
-          )}
-        </View>
+  return (
+    <View>
+      {togglePopup ? (
+        <QuickAction isVisible={true} clicked={popupItemClickHandler} />
+      ) : null}
+      <SegmentedControlTab
+        values={["Today", "Month"]}
+        selectedIndex={selectedIndex}
+        onTabPress={handleIndexChange}
+        borderRadius={0}
+        tabStyle={styles.tabStyle}
+        activeTabStyle={styles.activeTabStyle}
+        tabTextStyle={styles.tabTextStyle}
+        activeTabTextStyle={
+          Platform.OS === "ios"
+            ? styles.activeTabTextStyle_iOS
+            : styles.activeTabTextStyle
+        }
+      />
+      <View style={styles.listContainer}>
+        {selectedIndex === 0 ? (
+          <TaskViewer listData={DATA} />
+        ) : (
+          <View>
+            <Calendar
+              markedDates={{
+                "2020-05-25": {
+                  dots: [vacation, massage, workout],
+                },
+                "2020-05-26": { dots: [massage, workout] },
+              }}
+              markingType={"multi-dot"}
+            />
+          </View>
+        )}
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   tabStyle: {
