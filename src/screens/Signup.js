@@ -122,16 +122,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "red",
   },
-  signupBtnContainer: {
-    backgroundColor: "rgb(255, 79, 82)",
-    borderRadius: 10,
-  },
+  signupBtnContainer: {},
   signupBtn: {
     padding: 15,
+    backgroundColor: "rgb(255, 79, 82)",
+    borderRadius: 10,
   },
   disabledSignupBtn: {
     opacity: 0.5,
     padding: 15,
+    backgroundColor: "rgb(255, 79, 82)",
+    borderRadius: 10,
   },
   signupTextStyle: {
     fontSize: 18,

@@ -33,7 +33,7 @@ const SignIn = (props) => {
                 style: "cancel",
               },
             ]);
-            // props.navigation.navigate("Tabs");
+            props.navigation.navigate("Tabs");
           }, 2000);
         }}
       >
@@ -116,16 +116,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "red",
   },
-  loginBtnContainer: {
+  loginBtnContainer: {},
+  loginBtn: {
     backgroundColor: "rgb(255, 79, 82)",
+    padding: 15,
     borderRadius: 10,
   },
-  loginBtn: {
-    padding: 15,
-  },
   disabledLoginBtn: {
+    backgroundColor: "rgb(255, 79, 82)",
     padding: 15,
     opacity: 0.5,
+    borderRadius: 10,
   },
   loginTextStyle: {
     fontSize: 18,
