@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -6,49 +6,80 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 
-const SignIn = (props) => {
-  const [isValidEmail, setIsValidEmail] = useState(true);
-  const [isValidPassword, setIsValidPassword] = useState(true);
+import { Formik } from "formik";
 
+const SignIn = (props) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.welcomeTextStyle}>Welcome back</Text>
       <Text style={styles.subTextStyle}>Sign in to continue</Text>
-      <View style={styles.logInFormContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Email</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="email-address"
-            placeholder="Enter your email"
-          />
-          {!isValidEmail ? (
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+        }}
+        onSubmit={(value, { setSubmitting }) => {
+          setSubmitting(true);
+          setTimeout(() => {
+            console.log(value);
+            setSubmitting(false);
+            Alert.alert("Test alert", "demo", [
+              {
+                text: "Cancel",
+                onPress: () => console.log("OK"),
+                style: "cancel",
+              },
+            ]);
+            // props.navigation.navigate("Tabs");
+          }, 2000);
+        }}
+      >
+        {({ isSubmitting, handleChange, handleSubmit, values, errors }) => (
+          <View>
+            <View style={styles.logInFormContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="email-address"
+                  placeholder="Enter your email"
+                  onChangeText={handleChange("email")}
+                  value={values.email}
+                />
+                {/* {!isValidEmail ? (
             <Text style={styles.errorText}>Enter a valid email</Text>
-          ) : null}
-        </View>
+          ) : null} */}
+              </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <TextInput
-            secureTextEntry
-            style={styles.input}
-            placeholder="Enter your password"
-          />
-          {!isValidPassword ? (
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Password</Text>
+                <TextInput
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Enter your password"
+                  onChangeText={handleChange("password")}
+                  value={values.password}
+                />
+                {/* {!isValidPassword ? (
             <Text style={styles.errorText}>Please enter a valid password</Text>
-          ) : null}
-        </View>
-      </View>
-      <View style={styles.loginBtnContainer}>
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => props.navigation.navigate("Tabs")}
-        >
-          <Text style={styles.loginTextStyle}>Log In</Text>
-        </TouchableOpacity>
-      </View>
+          ) : null} */}
+              </View>
+            </View>
+            <View style={styles.loginBtnContainer}>
+              <TouchableOpacity
+                disabled={isSubmitting}
+                style={isSubmitting ? styles.disabledLoginBtn : styles.loginBtn}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.loginTextStyle}>Log In</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
@@ -91,6 +122,10 @@ const styles = StyleSheet.create({
   },
   loginBtn: {
     padding: 15,
+  },
+  disabledLoginBtn: {
+    padding: 15,
+    opacity: 0.5,
   },
   loginTextStyle: {
     fontSize: 18,
