@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -8,56 +8,84 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const Signup = (props) => {
-  const [isValidUserName, setIsValidUserName] = useState(true);
-  const [isValidEmail, setIsValidEmail] = useState(true);
-  const [isValidPassword, setIsValidPassword] = useState(true);
+import { Formik } from "formik";
 
+const Signup = (props) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.welcomeTextStyle}>Join us</Text>
       <Text style={styles.subTextStyle}>Sign up to continue</Text>
-      <View style={styles.logInFormContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>UserName</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="email-address"
-            placeholder="Enter your name"
-          />
-          {!isValidUserName ? (
-            <Text style={styles.errorText}>Enter your name</Text>
-          ) : null}
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Email</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="email-address"
-            placeholder="Enter your email"
-          />
-          {!isValidEmail ? (
-            <Text style={styles.errorText}>Enter a valid email</Text>
-          ) : null}
-        </View>
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+          userName: "",
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setSubmitting(true);
+          setTimeout(() => {
+            console.log(values);
+            setSubmitting(false);
+          }, 2000);
+        }}
+      >
+        {({ isSubmitting, values, errors, handleChange, handleSubmit }) => (
+          <View>
+            <View style={styles.logInFormContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>User Name</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="email-address"
+                  placeholder="Enter your name"
+                  onChangeText={handleChange("userName")}
+                  value={values.userName}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="email-address"
+                  placeholder="Enter your email"
+                  onChangeText={handleChange("email")}
+                  value={values.email}
+                />
+                {/* {!isValidEmail ? (
+                  <Text style={styles.errorText}>Enter a valid email</Text>
+                ) : null} */}
+              </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <TextInput
-            secureTextEntry
-            style={styles.input}
-            placeholder="Enter your password"
-          />
-          {!isValidPassword ? (
-            <Text style={styles.errorText}>Please enter a valid password</Text>
-          ) : null}
-        </View>
-      </View>
-      <View style={styles.signupBtnContainer}>
-        <TouchableOpacity style={styles.signupBtn}>
-          <Text style={styles.signupTextStyle}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Password</Text>
+                <TextInput
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Enter your password"
+                  onChangeText={handleChange("password")}
+                  value={values.password}
+                />
+                {/* {!isValidPassword ? (
+                  <Text style={styles.errorText}>
+                    Please enter a valid password
+                  </Text>
+                ) : null} */}
+              </View>
+            </View>
+            <View style={styles.signupBtnContainer}>
+              <TouchableOpacity
+                style={
+                  isSubmitting ? styles.disabledSignupBtn : styles.signupBtn
+                }
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+              >
+                <Text style={styles.signupTextStyle}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
@@ -99,6 +127,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   signupBtn: {
+    padding: 15,
+  },
+  disabledSignupBtn: {
+    opacity: 0.5,
     padding: 15,
   },
   signupTextStyle: {
