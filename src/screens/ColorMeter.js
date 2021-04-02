@@ -1,89 +1,79 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import ColorPalette from '../components/ColorPalette/ColorPalette';
+import ColorPalette from "../components/ColorPalette/ColorPalette";
 
-class ColorMeter extends Component {
+const COLOR_PALETTES = [
+  {
+    name: "green",
+    isSelected: false,
+  },
+  {
+    name: "red",
+    isSelected: false,
+  },
+  {
+    name: "blue",
+    isSelected: false,
+  },
+  {
+    name: "black",
+    isSelected: false,
+  },
+  {
+    name: "orange",
+    isSelected: false,
+  },
+];
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      colorPalettes: [
-        {
-          name: "green",
-          isSelected: false
-        },
-        {
-          name: "red",
-          isSelected: false
-        },
-        {
-          name: "blue",
-          isSelected: false
-        }, {
-          name: "black",
-          isSelected: false
-        }, {
-          name: "orange",
-          isSelected: false
-        }
-      ]
-    }
-  }
-
-  selectColorPalette = (colorName) => {
-    const updatedColorArray = [...this.state.colorPalettes];
+const ColorMeter = (props) => {
+  const [colorPalettes, setColorPalettes] = useState([].concat(COLOR_PALETTES));
+  const selectColorPalette = (colorName) => {
+    const updatedColorArray = [].concat(colorPalettes);
     updatedColorArray.map((colorObj) => {
       if (colorObj.name === colorName) {
         colorObj.isSelected = !colorObj.isSelected;
       } else {
-        colorObj.isSelected = false
+        colorObj.isSelected = false;
       }
     });
-    this.setState({
-      colorPalettes: updatedColorArray
-    });
-    this.selectedColorPalette();
-  }
+    setColorPalettes([].concat(updatedColorArray));
+    selectedColorPalette();
+  };
 
-  selectedColorPalette = () => {
-    const selectColor = this.state.colorPalettes.find((colorObj) => colorObj.isSelected);
+  const selectedColorPalette = () => {
+    const selectColor = colorPalettes.find((colorObj) => colorObj.isSelected);
     if (selectColor) {
-      this.props.getSelectedColorPalette && this.props.getSelectedColorPalette(selectColor.name);
+      props.getSelectedColorPalette &&
+        props.getSelectedColorPalette(selectColor.name);
     }
-  }
+  };
 
-  render() {
-
-    const colorPalettesElement = (this.state.colorPalettes.map(({ name, isSelected }) => {
-      return(
-        <TouchableOpacity key={name} onPress={() => this.selectColorPalette(name)}>
-          <ColorPalette color={name} isSelected={isSelected} />
-        </TouchableOpacity>
-      )
-    }));
-
+  const colorPalettesElement = COLOR_PALETTES.map(({ name, isSelected }) => {
     return (
-      <View style={styles.selectColorContainer}>
-        <Text style={styles.chooseColorLabel}>Choose Color</Text>
-        <View style={styles.colorsContainer}>
-          {colorPalettesElement}
-        </View>
-      </View>
+      <TouchableOpacity key={name} onPress={() => selectColorPalette(name)}>
+        <ColorPalette color={name} isSelected={isSelected} />
+      </TouchableOpacity>
     );
-  }
-}
+  });
+
+  return (
+    <View style={styles.selectColorContainer}>
+      <Text style={styles.chooseColorLabel}>Choose Color</Text>
+      <View style={styles.colorsContainer}>{colorPalettesElement}</View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   selectColorContainer: {},
   chooseColorLabel: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   colorsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginVertical: 15,
   },
 });

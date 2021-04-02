@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,34 +7,66 @@ import {
   TextInput,
 } from "react-native";
 
+import { Formik } from "formik";
+
 import ColorMeter from "./ColorMeter";
 
 const CreateNotes = (props) => {
+  const [selectedColor, setSelectedColor] = useState("black");
+
   const selectedColorPalette = (colorName) => {
-    console.log(colorName);
+    setSelectedColor(colorName);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.notesContainer}>
-        <View style={styles.notesCard}>
-          <View>
-            <TextInput style={styles.notesTitle} placeholder="Title" />
-          </View>
-          <View style={styles.notesDescription}>
-            <TextInput
-              style={styles.notesInput}
-              multiline
-              placeholder="Description"
-            />
-          </View>
-          <ColorMeter getSelectedColorPalette={selectedColorPalette} />
-          <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.doneBtn}>
-              <Text style={styles.doneBtnText}>Done</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Formik
+          initialValues={{
+            title: "",
+            description: "",
+          }}
+          onSubmit={(value, { setSubmitting }) => {
+            setSubmitting(true);
+            setTimeout(() => {
+              value["selectedColor"] = selectedColor;
+              console.log(value);
+              setSubmitting(false);
+            }, 2000);
+          }}
+        >
+          {({ isSubmitting, handleSubmit, handleChange, values, errors }) => (
+            <View style={styles.notesCard}>
+              <View>
+                <TextInput
+                  style={styles.notesTitle}
+                  placeholder="Title"
+                  onChangeText={handleChange("title")}
+                  value={values.title}
+                />
+              </View>
+              <View style={styles.notesDescription}>
+                <TextInput
+                  style={styles.notesInput}
+                  multiline
+                  placeholder="Description"
+                  onChangeText={handleChange("description")}
+                  value={values.description}
+                />
+              </View>
+              <ColorMeter getSelectedColorPalette={selectedColorPalette} />
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={isSubmitting ? styles.disabledDoneBtn : styles.doneBtn}
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  <Text style={styles.doneBtnText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </Formik>
       </View>
     </View>
   );
@@ -74,6 +106,13 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   doneBtn: {
+    padding: 15,
+    backgroundColor: "rgb(146, 65, 255)",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  disabledDoneBtn: {
+    opacity: 0.5,
     padding: 15,
     backgroundColor: "rgb(146, 65, 255)",
     borderRadius: 10,
