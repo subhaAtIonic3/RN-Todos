@@ -2,34 +2,12 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import ColorPalette from "../components/ColorPalette/ColorPalette";
-
-const COLOR_PALETTES = [
-  {
-    name: "green",
-    isSelected: false,
-  },
-  {
-    name: "red",
-    isSelected: false,
-  },
-  {
-    name: "blue",
-    isSelected: false,
-  },
-  {
-    name: "black",
-    isSelected: false,
-  },
-  {
-    name: "orange",
-    isSelected: false,
-  },
-];
+import { COLOR_PALETTES } from "../assets/data/colorPalettes";
 
 const ColorMeter = (props) => {
-  const [colorPalettes, setColorPalettes] = useState([].concat(COLOR_PALETTES));
+  const [colorPalettes, setColorPalettes] = useState([...COLOR_PALETTES]);
   const selectColorPalette = (colorName) => {
-    const updatedColorArray = [].concat(colorPalettes);
+    const updatedColorArray = COLOR_PALETTES;
     updatedColorArray.map((colorObj) => {
       if (colorObj.name === colorName) {
         colorObj.isSelected = !colorObj.isSelected;
@@ -37,7 +15,8 @@ const ColorMeter = (props) => {
         colorObj.isSelected = false;
       }
     });
-    setColorPalettes([].concat(updatedColorArray));
+    console.log("updatedColorArray => ", updatedColorArray, COLOR_PALETTES);
+    setColorPalettes([...updatedColorArray]);
     selectedColorPalette();
   };
 
