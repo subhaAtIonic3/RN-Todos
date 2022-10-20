@@ -23,7 +23,7 @@
     "react-native-gesture-handler": "~1.8.0",
     "react-native-popover-view": "^3.1.1",
     "react-native-progress-circle": "^2.1.0",
-    "react-native-reanimated": "~1.13.0",
+    "react-native-reanimated": "~2.10.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.2",
     "react-native-segmented-control-tab": "^3.4.1",
